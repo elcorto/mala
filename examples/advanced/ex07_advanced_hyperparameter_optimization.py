@@ -1,4 +1,5 @@
 import os
+from importlib.util import find_spec
 
 import mala
 from mala import printout
@@ -7,10 +8,10 @@ from mala.datahandling.data_repo import data_repo_path
 data_path = os.path.join(data_repo_path, "Be2")
 
 """
-Shows how recent developments in hyperparameter optimization techniques can be 
+Shows how recent developments in hyperparameter optimization techniques can be
 used (OAT / training-free NAS).
 
-REQUIRES OAPACKAGE.
+Requires oapackage. If missing, we skip that part of the example.
 """
 
 
@@ -62,5 +63,9 @@ def optimize_hyperparameters(hyper_optimizer):
     hyperoptimizer.set_optimal_parameters()
 
 
-optimize_hyperparameters("oat")
+if find_spec("oapackage") is not None:
+    optimize_hyperparameters("oat")
+else:
+    print("oapackage not found, skipping example")
+
 optimize_hyperparameters("naswot")
