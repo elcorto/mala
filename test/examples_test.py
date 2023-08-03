@@ -1,8 +1,19 @@
 """Test whether the examples are still working."""
 import importlib
 import runpy
+import os
 
 import pytest
+
+
+# There is https://github.com/RKrahl/pytest-dependency and
+# https://github.com/pytest-dev/pytest-order but we like to keep in simple
+# here. When running in parallel (pytest-xdist), we execute ex01 at most twice,
+# which is OK.
+def check_and_create_ex01_artifact():
+    if not os.path.exists("be_model.zip"):
+        print("Running example basic/ex01 in preparation another example")
+        runpy.run_path("../examples/basic/ex01_train_network.py")
 
 
 @pytest.mark.examples
@@ -11,6 +22,7 @@ class TestExamples:
         runpy.run_path("../examples/basic/ex01_train_network.py")
 
     def test_basic_ex02(self):
+        check_and_create_ex01_artifact()
         runpy.run_path("../examples/basic/ex02_test_network.py")
 
     def test_basic_ex03(self):
@@ -20,9 +32,11 @@ class TestExamples:
         runpy.run_path("../examples/basic/ex04_hyperparameter_optimization.py")
 
     def test_basic_ex05(self):
+        check_and_create_ex01_artifact()
         runpy.run_path("../examples/basic/ex05_run_predictions.py")
 
     def test_basic_ex06(self):
+        check_and_create_ex01_artifact()
         runpy.run_path("../examples/basic/ex06_ase_calculator.py")
 
     def test_advanced_ex01(self):
