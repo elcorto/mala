@@ -49,6 +49,8 @@ class TestDataShuffling:
         new = np.load("Be_REshuffled1.out.npy")
         assert np.isclose(np.sum(np.abs(old-new)), 0.0, atol=accuracy)
 
+    @pytest.mark.skipif(importlib.util.find_spec("openpmd_api") is None,
+                        reason="openpmd_api not found")
     def test_seed_openpmd(self):
         """
         Test that the shuffling is handled correctly internally.
@@ -172,6 +174,8 @@ class TestDataShuffling:
         new_loss = test_trainer.final_validation_loss
         assert old_loss > new_loss
 
+    @pytest.mark.skipif(importlib.util.find_spec("openpmd_api") is None,
+                        reason="openpmd_api not found")
     def test_training_openpmd(self):
         test_parameters = mala.Parameters()
         test_parameters.data.data_splitting_type = "by_snapshot"

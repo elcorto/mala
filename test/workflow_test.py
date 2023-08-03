@@ -32,6 +32,8 @@ class TestFullWorkflow:
         assert desired_loss_improvement_factor * \
                test_trainer.initial_test_loss > test_trainer.final_test_loss
 
+    @pytest.mark.skipif(importlib.util.find_spec("openpmd_api") is None,
+                        reason="openpmd_api not found")
     def test_network_training_openpmd(self):
         """Test whether MALA can train a NN."""
 
@@ -95,6 +97,8 @@ class TestFullWorkflow:
 
     @pytest.mark.skipif(importlib.util.find_spec("lammps") is None,
                         reason="LAMMPS is currently not part of the pipeline.")
+    @pytest.mark.skipif(importlib.util.find_spec("openpmd_api") is None,
+                        reason="openpmd_api not found")
     def test_preprocessing_openpmd(self):
         """
         Test whether MALA can preprocess data.
@@ -281,6 +285,8 @@ class TestFullWorkflow:
 
     @pytest.mark.skipif(importlib.util.find_spec("total_energy") is None,
                         reason="QE is currently not part of the pipeline.")
+    @pytest.mark.skipif(importlib.util.find_spec("openpmd_api") is None,
+                        reason="openpmd_api not found")
     def test_total_energy_from_ldos_openpmd(self):
         """
         Test whether MALA can calculate the total energy using the LDOS.
