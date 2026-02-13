@@ -74,6 +74,25 @@ quantities.
 - LDOS -> DOS: `LDOS.get_density_of_states`.
 - Self-consistent Fermi level from LDOS: `LDOS.get_self_consistent_fermi_energy`.
 
+#### Predicted total energy (detailed path)
+
+- Main total-energy assembly (predicted/inferred path):
+  `mala/targets/ldos.py:577` in `LDOS.get_total_energy`.
+- Where terms are summed: `mala/targets/ldos.py:767`. It computes `e_total =
+  e_band + e_rho_times_v_hxc + e_hartree + e_xc + e_ewald +
+  e_entropy_contribution`.
+- Band + entropy terms come from DOS integration: via `DOS.get_band_energy` and
+  `DOS.get_entropy_contribution` (called from `LDOS.get_total_energy`),
+  implemented in `mala/targets/dos.py:620` and `mala/targets/dos.py:785` (core
+  integrals in `mala/targets/dos.py:1084` and `mala/targets/dos.py:1159`).
+- Density-based terms are computed here: `mala/targets/density.py:764` in
+  `Density.get_energy_contributions`, returning `e_rho_times_v_hxc`,
+  `e_hartree`, `e_xc`, `e_ewald`.
+- Those density terms come from the QE-backed total-energy module:
+  `te.get_energies()` at `mala/targets/density.py:830`, after setup in
+  `mala/targets/density.py:954`; Fortran binding exposes them in
+  `external_modules/total_energy_module/total_energy.f90:302`.
+
 ### Density and total-energy-related pieces
 
 - Main density implementation: `mala/targets/density.py` (`class Density`).
