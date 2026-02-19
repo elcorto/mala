@@ -85,13 +85,16 @@ quantities.
   `DOS.get_entropy_contribution` (called from `LDOS.get_total_energy`),
   implemented in `mala/targets/dos.py:620` and `mala/targets/dos.py:785` (core
   integrals in `mala/targets/dos.py:1084` and `mala/targets/dos.py:1159`).
-- Density-based terms are computed here: `mala/targets/density.py:764` in
+- "Density-based" terms are computed here: `mala/targets/density.py:764` in
   `Density.get_energy_contributions`, returning `e_rho_times_v_hxc`,
   `e_hartree`, `e_xc`, `e_ewald`.
 - Those density terms come from the QE-backed total-energy module:
   `te.get_energies()` at `mala/targets/density.py:830`, after setup in
   `mala/targets/density.py:954`; Fortran binding exposes them in
   `external_modules/total_energy_module/total_energy.f90:302`.
+- Note that `e_ewald` is just the ion-ion interaction which doesn't actually
+  depend on the density, but is treated as part of the "density contributions"
+  since it is calculated by the "total-energy module".
 
 ### Density and total-energy-related pieces
 
